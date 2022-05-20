@@ -1,0 +1,125 @@
+\chapter{Trabalho e Energia}
+
+This question concerns the properties of the potential function found in the file Potential.txt.
+
+a) Plot the potential given by the data
+
+b) Find the equilibrium point(s) of the potential and show if they are stable or unstable
+
+Note
+
+You can use scipy.interpolate.interp1d to create a function which you can then solve using fsolve. Use the xtol parameter to specify a sensible value for the tolerance of the solution found by fsolve.
+
+c) Find and plot the maximum energy of particle bound in this potential
+
+d) Find and plot the allowed region for this bound particle
+
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Plot dos dados disponíveis no arquivo Potential.txt}, label={lst:Potential}]
+import numpy as np
+from matplotlib import pyplot as plt
+
+x, y = np.loadtxt("Potential.txt", unpack=True)
+
+plt.grid()
+plt.plot(x, y)
+plt.xlabel("x")
+plt.ylabel("V(x)")
+plt.show()
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Análise dos derivadas do potencial dados disponíveis no arquivo Potential.txt}, label={lst:Potential2}]
+# Import scipy interpolation
+from scipy.interpolate import interp1d
+from scipy.optimize import fsolve
+
+# Find first and second derivatives of the potential
+derivative = np.gradient(y, x)
+second_derivative = np.gradient(derivative, x)
+
+# Create a function using scipy.interpolate.interp1d
+f_derivative = interp1d(x, derivative)  # interp1d returns a function given a set of x and y points
+
+# Use fsolve to find zero points
+zero_point1 = fsolve(f_derivative, 1)
+zero_point2 = fsolve(f_derivative, 2.7, xtol=1e-5)
+
+# Interpolate to find the value of the potential and the second derivative at the turning points
+f_potential = interp1d(x, y)
+f_second = interp1d(x, second_derivative)
+
+zeros = [zero_point1, zero_point2]
+
+for i, zero in enumerate(zeros):
+    # Find values of potential and second derivative
+    zero_y = f_potential(zero)
+    zero_point_second = f_second(zero)
+    
+    # Print and plot zero points to 3 s.f.
+    print("Zero point %i is as x = %.3f" % (i + 1, zero))
+    print("The y value at this point is %.3f" % zero_y)
+          
+    # Work out if equilibrium is stable
+    if zero_point_second < 0:
+          print("This is an unstable equilibrium point")
+    elif zero_point_second > 0:
+          print("This is a stable equilibrium point")
+    else:
+          print("This equilibrium point is indeterminate. Examine the graph or higher derivatives")
+    
+    # Plot zero points
+    plt.plot(zero, zero_y, "o", color="b")
+
+plt.plot(x, y, label="Potential")
+plt.plot(x, derivative, label="1st Derivative")
+plt.plot(x, second_derivative, label="2nd Derivative")
+plt.grid()
+plt.xlabel("x")
+plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))  # Put legend outside plot
+plt.show()
+\end{lstlisting}
+
+Find the maximum energy of a bound particle
+The maximum energy of the bound particle is just less than value of the unstable equilibrium point
+
+
+
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Energia Máxima de uma partícula presa pelo potencial. Dados disponíveis no arquivo Potential.txt},label={lst:Potential3}]
+E_max = f_potential(zero_point2)
+print("The maximum allowed energy of the particle is %.3f" % E_max)
+
+plt.plot(x, y, label="U(x)")
+plt.axhline(E_max, linestyle="--", label="Maximum bound energy", color="k")
+plt.grid()
+plt.xlabel("x")
+plt.legend()
+plt.show()
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Região permitida para a partícula presa pelo potencial. Dados disponíveis no arquivo Potential.txt},label={lst:Potential4}]
+# Solve for the point where the lines U(x) and E_max intersect
+# i.e. U(x) - E_max = 0
+
+def f_intersection(x_in):
+    intersect = f_potential(x_in) - E_max
+    return intersect
+
+x1 = fsolve(f_intersection, 0.5, xtol=1e-5)
+x2 = zero_point2
+
+print("The particle is bound between the points %.3f and %.3f" % (x1, x2))
+
+plt.plot(x, y, label="U(x)")
+plt.axhline(E_max, linestyle="--", label="Maximum bound energy", color="k")
+plt.axvline(x1, linestyle="--", color="k")
+plt.axvline(x2, linestyle="--", color="k")
+plt.plot([x1, x2], [E_max, E_max], "o", color="b")
+plt.grid()
+plt.xlabel("x")
+plt.legend()
+plt.show()
+\end{lstlisting}
+
+Efeito resistivo do ar em bicicletas
+lançamento de projéteis
+ver  \href{URL}{https://drive.google.com/file/d/13ts72fG1Y2DRGR2Zralu3o-S1tEZ88sp/view}
+

@@ -1,0 +1,85 @@
+\chapter{Termodinâmica e Teoria Cinética dos Gases}
+Problemas do Haliday Capítulo 18 a 20
+
+1. A soap bubble with surface tension $\gamma = 2.50 \times 10^2 N/m$
+has a radius $r_0 = 2.0 mm$ when the pressure outside the bub-
+ble is 1.0 atmosphere. (a) Numerically calculate the radius of
+the soap bubble when the pressure outside the bubble drops to
+0.5 atm. (b) Numerically calculate the radius of the soap bub-
+ble if the pressure outside the bubble is raised to 2.0 atm.
+2. A small balloon is filled with nitrogen gas (assumed ideal) at
+the bottom of the Marianas Trench, 35,000 ft beneath the sur-
+face of the ocean. The balloon originally has a radius of 1.0
+mm, is massless, and is infinitely expandable without any sur-
+face tension, but always keeps a spherical shape. Assume the
+ideal gas inside the balloon is at $4^o$ C throughout this problem.
+The balloon begins to rise to the surface, as the balloon rises
+it expands, and as it moves there is a retarding force f propor-
+tional to speed v and balloon radius r given by
+\[f = 6\pi \eta rv,\]
+where $\eta = 1.7 \times 10^{-3} N s/m$ is the viscosity of water. (a)
+Calculate the initial buoyant force on the balloon. (b) What
+will be the size of the balloon on the surface? (c) Numerically
+solve this problem to find out how long it takes for the bal-
+loon to rise to the surface.
+
+1. Write a program to simulate the random walk of a particle.
+The particle starts at the origin, and can then take a step with
+$\Delta x$ and $\Delta y$ increments assigned randomly between $-1$ and $+1$.
+(a) Allow the particle to “walk” through 200 steps, and graph
+the motion. Choose the scale of the
+graph to just fit the data. (b) Allow the particle to walk
+through 2000 steps, but this time plot the position of the particle only at the end of each 10 steps. Again, choose the scale
+of the graph to just fit the data. (c) Repeat, but now allow the
+particle to walk through 20,000 steps, and only plot the position at the end of each 100 steps. Compare the three graphs.
+How does the size of the graph grow with the number of
+steps? Do the graphs look similar? If the graphs were shuffled, would you be able to tell which was which?
+
+2. Consider a van der Waals gas with $a = 0.10 J m^3 /mol$ and
+$b = 1.0 \times 10^4 m^3 /mol$. (a) Find the temperature $T_{cr}$ , pressure $p_cr$ , and volume $V_cr$ where $p/V 0$ and $2 p/V20$.
+(b) Graph the pressure along isotherms as a function of vol-
+ume for 0.80T cr , 0.85T cr , 0.90T cr , 0.95T cr , 1.00T cr , 1.05T cr ,
+and 1.10T cr . The graphs should extend from $V 0$ to $V$ 
+5V cr . (c) What is physically significant about the T cr isotherm?
+
+Difusão da Molécula de um gás
+
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Difusão da Molécula de Um Gás em 2D}, label={lst:Diffusion}]
+import numpy as np
+import matplotlib.pyplot as plt
+import pylab as pl
+from itertools import cycle
+
+
+pi = np.pi
+# Simular os passos
+def random_walk(step_n, step_size):
+    origin = np.zeros((1)) # comece em 0
+    steps = 2*pi*np.random.uniform(low=0.0, high=1.0, size=step_n)
+    x_steps = step_size*np.cos(steps)
+    y_steps = step_size*np.sin(steps)
+    x_path = np.concatenate([origin, x_steps]).cumsum(0)
+    y_path = np.concatenate([origin, y_steps]).cumsum(0)
+    return x_path, y_path
+
+
+step_n = 100000
+step_size = 1
+
+x_path, y_path = random_walk(step_n, step_size)
+xstart = x_path[:1]
+ystart = y_path[:1]
+xstop = x_path[-1:]
+ystop = y_path[-1:]
+
+fig = pl.figure(figsize=(8,4),dpi=200)
+ax = fig.add_subplot(111)
+ax.plot(x_path, y_path,c='blue',alpha=0.5,lw=0.5,ls='-');
+ax.plot(xstart, ystart, c='red', marker='+')  #Plot o inicio
+ax.plot(xstop, ystop, c='black', marker='o') # Plot o Final
+pl.title('2D Random Walk')
+pl.tight_layout(pad=0)
+pl.grid(which="both")
+pl.savefig('random_walk_1d.png',dpi=250);
+
+\end{lstlisting}

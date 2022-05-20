@@ -1,0 +1,42 @@
+\chapter{Ondas}
+Problemas do Haliday Capítulo 16 e 17
+
+A simple function is given by $y(x) = x( \pi - x)$ in the region
+$0 \leqslant x \leqslant \pi$ . It is desired that this function be approximated by
+a series of sine functions in the form \[y(x) = a_1  \sin x +
+a_3 \sin 3x + a_5 \sin 5x \cdots\] Esse é um exemplo de uma aproximação por série de Fourier. (a) Use a graphing program and
+estimate the values for $a_1 , a_3$ , and $a_5$ that give the best visual
+fit. (b) Use a symbolic math program (such as Scipy or Scilab) to evaluate the integrals
+
+\[I_n = \int_0^\pi \sin^2 nx \dd x\]
+e 
+\[I_{nm} = \int_0^\pi \sin nx \sin mx \dd x \]
+(c) Find the exact values of the coefficients $a_n$ for
+$n \in \{1, 2, 3, 4, 5\}$ by evaluating
+\[ a_n = \frac{1}{I_n} \int_0^\pi x(\pi - x) \sin nx \dd x   \]
+Why does this work? Compare your answers to the visual in-
+spection process.
+
+1. Write a computer program for a Doppler sonar. The program
+should request the speed of sound, the frequency of the output
+pulse (or “ping”), the frequency of the reflected pulse, and the
+time delay between the output ping and the return ping. The
+program should then inform the user of the probable distance
+to the target and the target’s possible speed(s) toward or away
+from the source. Try the program with the following data: the
+speed of sound is 340 m/s; the output pulse frequency is
+20 kHz; the frequency of the reflected pulse is 20.612 kHz;
+and the time delay between the output and reflected pings is
+0.230 s.
+2. Generalize the previous program so that the data from two
+consecutive pings can be used to determine both the distance
+to the target and the velocity of the target. The program will
+also need to request the rate at which outgoing pings are sent.
+Assume that the outgoing pings are omnidirectional, but the
+direction of incoming pings can be resolved. Try the program
+with the following data: the speed of sound is 340 m/s; the
+output pulse frequency is 20 kHz and the pulses are sent once
+per second; a 20.921 kHz reflected pulse coming from 40° E
+of N is received 0.288 s after the first pulse is sent; and a sec-
+ond 20.921 kHz reflected pulse coming from $36.5^o$ E of N is
+received 0.311 s after the second pulse is sent.

@@ -1,0 +1,24 @@
+\chapter{Momento Linear}
+Problemas do Haliday Capítulos 9
+
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Determinando Centro de Massa de uma distribuição aleatória em 2D}, label={lst:2DCM}]
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+n =100
+# Gerar posicoes e Massas aleatorias
+x = np.random.randint(-50, 50, n)
+y = np.random.randint(0,200,n)
+m = np.random.randint(1,200, n)
+
+# Calcula as Coordenadas do Centro de Massa
+cgx = np.sum(x*m)/np.sum(m)
+cgy = np.sum(y*m)/np.sum(m)
+
+# Plot do Centro de Massa
+plt.scatter(x,y,s=m);
+plt.scatter(cgx, cgy, color='k', marker='+', s=1e4);
+plt.title('Centro de Massa');
+\end{lstlisting}
+

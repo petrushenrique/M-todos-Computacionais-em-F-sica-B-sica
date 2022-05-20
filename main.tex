@@ -1,0 +1,246 @@
+\documentclass[12pt,a4paper,titlepage,portuges,twoside,final]{book}
+\usepackage[toc,page]{appendix}
+\usepackage[brazil,brazilian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{makeidx}
+\usepackage{amsfonts} %Fontes Matemáticas AMS
+\usepackage{amsmath} %Fontes Matemáticas AMS
+\usepackage{amssymb} %Fontes Matemáticas AMS
+\usepackage{amstext} %Fontes Matemáticas AMS
+\usepackage{amsmath} %Fontes Matemáticas AMS
+\usepackage{amsthm} % Teoremas AMS
+\usepackage{physics}
+\usepackage{float} %Alinhamentos Especiai
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usepackage{pgf}
+\usepackage{epigraph}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+
+\newcounter{lemacount}
+\newcounter{propocount}
+\newcounter{remacount}
+\newcounter{deficount}
+\newcounter{corocount}
+\newcounter{exempcount}[chapter]
+\newtheorem{lema}[lemacount]{Lema}
+\newtheorem{rema}[remacount]{{\bf Nota}}
+\newtheorem{propo}[propocount]{Proposição}
+\newtheorem{defi}[deficount]{Definição}
+\newtheorem{coro}[corocount]{Corolário}
+\newtheorem{exemplo}[exempcount]{Exemplo}
+\renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
+\renewcommand{\thepropocount}{\arabic{chapter}.\arabic{propocount}}
+\renewcommand{\thelemacount}{\arabic{chapter}.\arabic{section}.\Alph{lemacount}}
+\renewcommand{\theremacount}{\arabic{chapter}.\alph{remacount}}
+\renewcommand{\thecorocount}{\arabic{chapter}.\roman{corocount}}
+\renewcommand{\thedeficount}{\arabic{chapter}.\Alph{deficount}}
+\renewcommand{\theexempcount}{\arabic{chapter}.\arabic{exempcount}}
+\renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
+\renewcommand{\appendixtocname}{Lista de Apêndices}
+\renewcommand{\appendixpagename}{Apêndices}
+
+\setlength{\parindent}{1.5cm}%
+\setlength{\textwidth}{15.6cm}%
+\setlength{\textheight}{22.8cm}%
+\setlength{\evensidemargin}{0cm}%
+\setlength{\oddsidemargin}{1cm}%
+\setlength{\headsep}{1cm}%
+\hyphenpenalty=2000
+\tolerance=400
+\makeindex
+\setcounter{figure}{0}
+\setcounter{propocount}{0}
+\setcounter{remacount}{0}
+\setcounter{lemacount}{0}
+\setcounter{deficount}{0}
+\setcounter{corocount}{0}
+\setlength\epigraphwidth{.45\textwidth}
+\setlength\epigraphrule{0pt}
+
+\begin{document}
+\include{cover}
+	
+	\newpage
+	\frontmatter
+\include{pref}
+	
+	\baselineskip 0.7cm  \tableofcontents
+	\addtocontents{toc}{\protect\thispagestyle{empty}}
+	\newpage
+	\renewcommand\lstlistlistingname{Lista de Códigos Computacionais}
+	\lstlistoflistings
+	
+\mainmatter	
+\pagestyle{headings}
+\pagenumbering{arabic}\setcounter{page}{1}
+
+\include{ch1-intro}
+
+\include{ch2-cinem}
+
+\include{ch3-dyn}
+
+\include{ch4-TrabEnerg}
+
+\include{ch5-momento}
+
+
+
+
+\chapter{Rotações, Torque e Momento Angular}
+Problemas do Haliday Capítulos 10 e 11
+
+\include{ch7-grav}
+
+\include{ch8-osc}
+
+\include{ch9-ond}
+
+\include{ch10-flu}
+
+\include{ch11-termo}
+
+
+
+\chapter{O Campo Elétrico}
+Problemas do Haliday Capítulo 21 a 25
+
+Calcule a força de atração entre dois anéis com cargas uniformemente distribuídas $+q$ e $-q$. O eixo dos anéis coincide com o eixo $x$ e cada anel tem raio $R$.
+
+Problema Repetir para um disco e para uma esfera
+
+Um anel de raio $R = 1 cm$ esta uniformemente carregado com carga $Q$. Um elétron se move no plano do anel. (a) Com  $Q= -100 \mu C$ Encontre a velocidade do elétron para que ele se mova  em u
+
+\chapter{Circuitos Elétricos}
+Problemas do Haliday Capítulo 26 e 27
+
+\chapter{O Campo Magnético}
+Problemas do Haliday Capítulo 28, 29 e 30
+
+\include{ch15-maxwell}
+
+\chapter{Óptica Física e Geométrica}
+Problemas do Haliday Capítulos 34 a 36
+
+
+\include{ch17-variacional}
+
+\appendix
+\chapter{Elementos de {\it Python}}
+\section{Mais informações sobre tipos de variáveis}\label{ap:1.1}
+\section{Programação Orientada a Objetos em Python}\label{ap:1.2}
+
+\chapter{{\it Python} em aplicações numéricas: Numpy}
+\section{Arrays}
+\section{Métodos Estatísticos}
+\section{Polinômios}
+\section{Álgebra Linear}
+\section{Sorteios Aleatórios}
+
+Calculando o valor de $\pi$. Ver a Seção \ref{sc:Monte_Carlo}
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Estimando o valor de $\pi$ usando sorteios aleatórios}, label={lst:x+y}]
+import numpy as np
+
+size = int(10**6)
+experiments = int(10**3)
+
+def pi_estimator(size):
+    x = np.random.uniform(low = 0, high = 1, size = size)
+    y = np.random.uniform(low = 0, high = 1, size = size)
+    r = np.sqrt(x**2+y**2)
+    pi_calculated = 0
+    for R in r:
+        if R<1:
+            pi_calculated += 4/size
+    return pi_calculated
+
+pi_data = np.zeros(experiments)
+for t in range(experiments):
+    pi_data[t] = pi_estimator(size)
+pi = np.mean(pi_data)
+pi_error = np.var(pi_data)
+
+
+print('\u03C0 =', pi, '\u00b1', pi_error)
+print(pi-np.pi)
+\end{lstlisting}
+
+Passeio Aleatório
+
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Histogram da Distribuição de Probabilidade da caminhada Aleatória}, label={lst:RW}]
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def random_walk(step_set,prob, step_n):
+    origin = np.zeros((1)) 
+    step_shape = (step_n)
+    steps = np.random.choice(a=step_set, size=step_shape, p = prob)
+    path = np.concatenate([origin, steps]).cumsum(0)
+    return path
+
+step_n = 100000
+step_set = [-1, 1]
+p = 0.5
+prob = [1-p, p]
+
+simulations = 100000
+data = np.zeros(simulations)
+for t in range(simulations):
+    data[t] = random_walk(step_set, prob, step_n)[-1:]
+plt.hist(data, bins=100, density=True)
+var = np.var(data)
+mean = np.mean(data)
+x = np.linspace(-1500,1500,500)
+y = np.exp(-(x-mean)**2/(2*var))/np.sqrt(2*np.pi*var)
+plt.plot(x,y, color='Red')
+plt.show()    
+
+\end{lstlisting}
+
+
+\chapter{Construção de Gráficos com Matplotlib}
+\section{Mais obções básicas com gráficos}
+\section{Histogramas}
+\section{Plots de Contorno}
+\section{Gráficos em 3D}
+\section{Animações}
+
+\chapter{Computação Algébrica com Sympy}
+
+
+\chapter{Elementos de Cálculo Numérico}
+\section{Soluções Numéricas}
+\section{Integração Numérica}
+\section{Diferenciação Numérica}
+\section{Equações Diferenciais Ordinárias}
+\subsection{Método de Euler}
+\subsection{Variações do Método de Euler}
+\subsection{Método de Runge-Kutta}
+\section{Método de Monte Carlos}\label{sc:Monte_Carlo}
+\section{Métodos Estocásticos}
+
+
+
+\section{Equações Diferenciais Parciais}
+\subsection{Equação de Laplace}
+\subsection{Equação da Onda}
+\subsection{Equação do Calor}
+
+\chapter{Usando \LaTeX}\label{a:latex}
+
+\bibliography{ref}
+%novo estilo%
+\bibliographystyle{unsrt}
+\end{document}

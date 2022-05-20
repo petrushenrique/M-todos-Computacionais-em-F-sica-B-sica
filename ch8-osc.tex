@@ -1,0 +1,171 @@
+\chapter{O Oscilador Harmônico}
+Problemas do Haliday Capítulo 15
+
+\begin{lstlisting}[language=Python, frame=lines, basicstyle=\footnotesize, caption={Oscilador Harmônico Simples}, label={lst:OHS}]
+import matplotlib.pyplot as plt
+import numpy as np
+
+# set constants
+k = 10
+m = 1
+t_max = 10.0
+
+#Set the number of iterations to be used in the for loop
+no_of_iterations=100000
+
+# set time step so that the loop will always iterate until t=t_max seconds 
+dt = t_max/no_of_iterations
+
+
+# make arrays to store data
+t = np.zeros(no_of_iterations)
+x = np.zeros(no_of_iterations)
+v = np.zeros(no_of_iterations)
+
+# set initial conditions
+t[0] = 0
+x[0] = 5
+v[0] = 0
+
+
+# evolve
+for i in np.arange(1,no_of_iterations):
+    t[i] = dt * i
+    v[i] = v[i-1] - dt *k/m*x[i-1]
+    x[i] = x[i-1] + dt * v[i]
+
+fig, ax = plt.subplots(2, 2,figsize=(10, 10))
+ax[0,0].plot(t, x)
+ax[0,0].set(title = 'time x position', xlabel='time', ylabel='position')
+ax[1,0].plot(t, v)
+ax[0,0].set(title = 'time x velocity', xlabel='time', ylabel='velocity')
+ax[0,1].plot(x,v)
+ax[0,1].set(title = 'position x velocity', xlabel='position', ylabel='velocity')
+ax[1,1].plot(t,1/2*m*v**2+1/2*k*x**2)
+ax[1,1].set(title = 'time x energy', xlabel='time', ylabel='energy')
+
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=Python, frame=lines, basicstyle=\footnotesize, caption={Oscilador Harmônico Duplo}, label={lst:OHS2}]
+import matplotlib.pyplot as plt
+import numpy as np
+
+# set constants
+k = 10
+m = 1
+t_max = 10.0
+l = 1
+#Set the number of iterations to be used in the for loop
+no_of_iterations=1000
+
+# set time step so that the loop will always iterate until t=t_max seconds 
+dt = t_max/no_of_iterations
+
+
+# make arrays to store data
+t = np.zeros(no_of_iterations)
+x1 = np.zeros(no_of_iterations)
+v1 = np.zeros(no_of_iterations)
+x2 = np.zeros(no_of_iterations)
+v2 = np.zeros(no_of_iterations)
+
+# set initial conditions
+t[0] = 0
+x1[0] = 0
+v1[0] = 5
+x2[0] = 0
+v2[0] = -5
+
+
+# evolve
+for i in np.arange(1,no_of_iterations):
+    t[i] = dt * i
+    v1[i] = v1[i-1] - dt *k/m*(x1[i-1]-x2[i-1])
+    v2[i] = v2[i-1] + dt *k/m*(x1[i-1]-x2[i-1])
+    x1[i] = x1[i-1] + dt * v1[i]
+    x2[i] = x2[i-1] + dt * v2[i]
+
+fig, ax = plt.subplots(2, 2,figsize=(10, 10))
+ax[0,0].plot(t, x1,label="particle 1")
+ax[0,0].plot(t, x2,label="particle 2")
+ax[0,0].set(title = 'time x position', xlabel='time', ylabel='position')
+ax[0,0].legend(loc='upper left')
+ax[1,0].plot(t, v1,label="particle 1")
+ax[1,0].plot(t, v2,label="particle 2")
+ax[1,0].set(title = 'time x velocity', xlabel='time', ylabel='velocity')
+ax[1,0].legend(loc='upper left')
+ax[0,1].plot(t,(1/2)*m*v1**2+(k/2)*x1**2)
+ax[0,1].plot(t,(1/2)*m*v2**2+(k/2)*x2**2)
+ax[0,1].set(title = 'time vs energy', xlabel='time', ylabel='energy')
+ax[1,1].plot(t,(x1+x2)/2)
+ax[1,1].set(title = 'Movement of the center of mass', xlabel='time', ylabel='Center of Mass')
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python, frame=lines, basicstyle=\footnotesize, caption={Rotores acoplados}, label={lst:OH-Rotores}]
+import matplotlib.pyplot as plt
+import numpy as np
+
+# parameters
+
+damping = 0.1
+freq_nl = 5.0
+total_time = 20
+dt = 0.0001
+steps = int(total_time/dt)
+pi = np.pi
+
+#arrays
+
+theta1 = np.zeros(steps)
+theta2 = np.zeros(steps)
+v1 =  np.zeros(steps)
+v2 =  np.zeros(steps)
+t = dt*np.arange(steps)
+
+# Initial conditions
+theta1[0] = 0
+theta2[0] = pi/3
+v1[0] = 0
+v2[0] = 0
+
+
+for i in range(steps-1):
+    theta1[i+1] = theta1[i] + dt*v1[i]
+    theta2[i+1] = theta2[i] + dt*v2[i]
+    v1[i+1] = v1[i] + dt*(freq_nl*np.sin(theta1[i+1]-theta2[i+1]) - damping*v1[i+1])
+    v2[i+1] = v2[i] + dt*(freq_nl*np.sin(theta2[i+1]-theta1[i+1]) - damping*v2[i+1])
+
+# Plots
+plt.plot(t,theta1, label = "rotor 1")
+plt.plot(t, theta2, label = "rotor 2")
+plt.legend()
+plt.show()
+\end{lstlisting}
+
+1. Consider a system composed of two objects constrained
+to move along the x axis. The first object is connected to
+a spring that is attached to the origin, and the second object
+is connected to a spring that is attached to the first object.
+Both objects have the same mass, 0.10 kg, and both springs
+have the same force constant, 1.0 N/m. (a) Numerically
+simulate the motion of the objects, assuming that the second
+object is pulled and then released a distance of 1.0 cm
+from the equilibrium position. Generate a graph of the mo-
+tion of the objects. (b) Use a fast Fourier transform (avail-
+able on some spread sheet programs) to show that there
+are two characteristic frequencies of the motion. What are
+these frequencies?
+
+2. An object of mass m moves subject to a force that results in a
+potential energy of U(x) = 14 kx 4 . This type of motion is called
+a quartic oscillator. Note that the frequency of oscillation de-
+pends on the amplitude of the oscillations here. Assuming a
+mass m = 0.10 kg and a force constant of k = 100 N/m 3 , nu-
+merically simulate the motion for several different ampli-
+tudes. Graph the results, and find the relation between ampli-
+tude and frequency for this system.
+
+Pêndulo Simples além das pequenas oscilações
+ver  \href{URL}{https://drive.google.com/file/d/13ts72fG1Y2DRGR2Zralu3o-S1tEZ88sp/view}
+
