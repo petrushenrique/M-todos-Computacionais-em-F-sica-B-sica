@@ -547,14 +547,13 @@ print('fim')
 \end{lstlisting}
 Cada vez que o bloco de instruções do {\tt while} é executado, o contador $i$ (que começa em 0), é acrescido de 1 e seu valor é impresso. Esse bloco será executado até que $i$ tenha o valor $10$, quando o Python sai do loop e executa o comando {\tt print(fim}).
 
-Podemos combinar loops {\tt while} com {\tt if ... elif...else} para obtermos decisões mais complexas. Veja o exemplo a seguir
+Podemos combinar loops {\tt while} com {\tt if ... elif...else} para obtermos decisões mais complexas. Veja o exemplo a seguir:
+
 {\bf Exemplo:} Em 1937, o matemático alemão Lothar Collatz, propôs a seguinte sequência de inteiros positivos: O primeiro termos da sequência é $c_1 =n$, onde $n$ é um número inteiro positivo. Dado o $c_k$, o $k$-ésimo termo da sequência, o termo seguinte é obtido fazendo
 \[a_{k+1} =\left\{\begin{array}{cl} a_k/2 & \textrm{se } a_k\textrm{ é par}\\
 3a_k+1 & \textrm{se } a_k \textrm{ é ímpar}
 \end{array}\right.\]
-Collatz conjecturou que qualquer que seja o inteiro inicial $c_1$ a sequência sempre termina em $1$. Até o momento em que escrevo essas notas (2022), a Conjectura de Collatz nunca havia sido provada, permanecendo como um problema em aberto (para mais detalhes veja a Ref. \cite{collatzconjecture}. 
-
-Nesse exemplo, iremos obter a sequência de Collatz para um inteiro positivo qualquer. Tente resolver antes de checar uma possível solução abaixo.
+Collatz conjecturou que qualquer que seja o inteiro inicial $c_1$ a sequência sempre termina em $1$. Até o momento em que escrevo essas notas (2022), a Conjectura de Collatz nunca havia sido provada, permanecendo como um problema em aberto (para mais detalhes veja a Ref. \cite{collatzconjecture}. Nesse exemplo, iremos obter a sequência de Collatz para um inteiro positivo qualquer. Tente resolver antes de checar uma possível solução abaixo.
 
 \begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Testando a conjectura de Collatz}, label={lst:Collatz}]
 num = int(input('Qual o inteiro positivo inicial?'))
@@ -582,7 +581,7 @@ um comando de pausa.
 O exemplo a seguir deve esclarecer o uso dessas instruções.
 
 {\bf Exemplo:} Você precisa escrever um programa que teste se um número é
-prima ou não. O programa deve pedir o inteiro para testar, em seguida, imprima uma mensagem informando o primeiro fator encontrado ou informando que o número é primo. Tente você mesmo antes de examinar o exemplo abaixo:
+primo ou não. O programa deve pedir o inteiro para testar, em seguida, imprima uma mensagem informando o primeiro fator encontrado ou informando que o número é primo. Tente você mesmo antes de examinar o exemplo abaixo:
 
 \begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Testando se um número é primo}, label={lst:isprime}]
 Number = int(input('Qual inteiro iremos testar?'))
@@ -714,7 +713,7 @@ def energia_momento(m,v):
 Em várias situações é interessante definir argumentos com valores padrão. Em Python, eles são conhecidos como argumentos de palavras-chave, e nesse caso apontar o valor dos argumentos passa a ser opcional, i.e. a função usa o argumento padrão quando um novo valor não é usado. Quando os argumento são passados com palavras-chave, eles podem ser chamados em qualquer ordem. Os argumentos de palavra-chave são definidos pelo nome do argumento (a palavrachave), um sinal de igual ( = ), e o valor padrão que é usado se o argumento não for fornecido quando a função é chamada. A sintaxe básica é a seguinte
 \begin{lstlisting}[language=Python]
 def <name>s(<key word1> = <val1>, ..., <key wordn> = <valn>):
-    <codigo da fucao>
+    <codigo da funcao>
 \end{lstlisting}
 
 
@@ -722,11 +721,60 @@ def <name>s(<key word1> = <val1>, ..., <key wordn> = <valn>):
 
 \section{Bibliotecas: o Básico}
 
+Uma das coisas mais úteis do Python é a existência de inúmeras bibliotecas que permitem adicionar novas funcionalidades ao sistema. Sem elas o Python básico é apenas um linguagem de programação e teríamos que escrever códigos até para coisas bastante simples. Por exemplo, sozinho o Python não possui funções trigonométricas embutidas, nem conhece o valores de $\pi$ e $e$. Mas isso pode ser facilmente resolvido importando a biblioteca {\bf math}. Isso é feito com o comando {\tt import math}
+
+Os comandos {\tt import}são geralmente colocados no início do código, mas essa é meramente uma questão de conveniência. Uma vez que o pacote/biblioteca tiver sido importado, todas as funções no {\bf math} estão disponíveis e podem ser acessadas usando a sintaxe {\tt math.<function-name>}. Por exemplo
+
+\begin{lstlisting}[language=Python]
+import math
+x = math.p i/3.0
+print(x, math.sin(x), math.cos(x), math.tan(x))
+\end{lstlisting}
+
+Existem muitas outras funções e constantes no pacote {\bf math}. Você pode saber quais usando 
+
+\begin{lstlisting}[language=Python]
+help(math)
+\end{lstlisting}
+
+Algumas vezes é
+ útil para apenas importar elementos individuais de um pacote em vez do pacote inteiro. Por exemplo para que pudéssemos nos referir a {\tt sin(x)} ao invés de {\tt math.sin(x)}.
+ 
+ \begin{lstlisting}[language=Python]
+from math import sin
+\end{lstlisting}
+
+Outras vezes você pode importar todas as funções em um pacote (e novamente se referir a função pelo nome):
+
+ \begin{lstlisting}[language=Python]
+from math import *
+\end{lstlisting}
+
+Uma outra opção é dar um apelido curto para o pacote durante a importação. Por exemplo, durante todos esse texto utilizaremos um pacote bastante útil para a produção de gŕaficos chamado {\bf matplotlib.pyplot} é conveniente usar
+\begin{lstlisting}[language=Python]
+import matplotlib.pyplot as plt
+\end{lstlisting}
+Com isso os comandos do {\bf matplotlib.pyplot} são chamados usando {\tt plt.<function-name>}. Vamos usar essa oportunidade para construir nosso primeiro gráfico. Vamos plotar os pontos $(0,0), (1,2), (3,1)$. Para isso (incluindo o comando de importação do {\bf matplotlib.pyplot}, que não será necessário caso você já tenha feito a importação)
+
+\begin{lstlisting}[language=Python]
+import matplotlib.pyplot as plt
+
+plt.scatter([0,1,3],[0,2,1])
+plt.show()
+\end{lstlisting}
+Você deve obter algo como mostrado na imagem \ref{fig:first-plot}
+
+\begin{figure}
+    \centering
+    \includegraphics{Images/first plot.png}
+    \caption{Plot dos pontos $(0,0), (1,2), (3,1)$. }
+    \label{fig:first-plot}
+\end{figure}
 
 Construção de um barra de progresso para algorítimos que levem tempo
 
 \begin{lstlisting}[language=Python]
-rom tqdm.notebook import tqdm
+from tqdm.notebook import tqdm
 from time import sleep
 
 for i in tqdm(range(10)):
@@ -741,6 +789,13 @@ for i in tqdm(range(10)):
 \begin{enumerate}
     \item Comente com $\#$ os códigos dados como exemplo nesse capítulo, indicado o que cada linha ou bloco instrui o computador a fazer.
     \item Escreva um programa que pede para o usuário escrever um número inteiro entre $0$ e um milhão, e então escreve esse número por extenso.
+    \item Escreva uma função que calcule o fatorial de um número inteiro. A seguir compare a eficiência do seu código com as funções factorial disponíveis nos pacotes {\bf math} e {\bf numpy}. Use o {\tt \%timeit} para isso.
+    \item Escreva uma função para calcular a função $\text{sinc}(x)$ que dada por
+    \[ \text{sinc } x = \frac{\sin x}{x}.\]
+    Garanta que a função calcule corretamente o caso $x=0$ (esse é um dos limites fundamentais que você aprendeu em Cálculo I).
+    \item Um número $T$ é chamado triangular quando existe um inteiro $N$ tal que
+    \[ T = 1+2+ \cdots+ N.\]
+    Por exemplo, $3(=1+2)$, $6(=1+2+3)$, $10(=1+2+3+4)$ são números triangulares. Construa uma função que calcula o $n$-ésimo número triangular.
     \item  Quando escrevemos um número $n$ na base decimal estamos implicitamente dizendo:
 \[ n = d_N 10^N + d_{N-1} 10^{N-1} + \cdots + d_2 10^2 + d_1 10^1 + d_0 10^0 \]
 onde $N+1$ é o número de dígitos de $n$ e $d_k = 0,\cdots,9$, $k=0,\cdots,N$ são os dígitos desse número ($d_N \neq 0)$. Da mesma forma $n$ pode ser escrito na base binária, onde os digitos dão $b_j = 0,1 $ fazendo
@@ -754,6 +809,5 @@ resultado que obtemos reconhecendo a série geométrica finita na expressão aci
         \item Como disse na introdução este é um problema de matemática. A resolução esperada do {\it Problema dos Armários} não envolve computação, mas sim a compreensão de propriedades de divisores de números inteiros. Vamos tentar entender essa propriedade usando um programa de computador: Construa um programa que analisa os 10 mil primeiros números inteiros e separa em uma lista aqueles que tem um número ímpar de divisores. Verifique que todos estes números são quadrados perfeitos. Suponha que esta é uma propriedade geral, como ela pode ser usada para responder o {\it Problema dos Armários}.
         \item {\bf (Opcional)} Demonstre matemáticamente a propriedade conjecturada no item anterior, i.e.  ``Um núemero inteiro positivo é um quadrado perfeito se e somente se ele possui um número ímpar de divisores''.
     \end{enumerate}
-    \item Escreva uma função que calcule o fatorial de um número inteiro.
 \end{enumerate}
 
