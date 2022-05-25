@@ -203,13 +203,13 @@ Nesse ponto precisamos destacar que essas operações não agem somente em núme
 Nesse exemplo as variáveis x, y e z são do tipo {\it string} e o Python entende a operação $+$ como concatenação dessas strings. Já n é um variável do tipo inteiro e o Python entende a operação de multiplicar um inteiro com a string x+y+z, como concatenar n vezes essa string. Essa versatilidade do Python é uma de suas características úteis, mas também pode gerar erros.
 
 Em Python, todos os operadores matemáticos $+$ (adição), $-$ (subtração), $*$ (multiplicação) funcionam como seria de esperar em números e variáveis numéricas. Ou seja contanto que você fique com os tipos de variáveis numéricas, adição, subtração e
-multiplicação não deve haver muitos problemas. A divisão (/) tem algumas particularidades. Funciona perfeitamente em variáveis do tipo float, que são aquela usadas para descrever números via notação decimal, mas se operando entre inteiros: o resultado é sempre a parte inteira da resposta real. Veja por exemplo
+multiplicação não deve haver muitos problemas. A divisão (/) tem algumas particularidades. Funciona perfeitamente em variáveis do tipo float, que são aquela usadas para descrever números via notação decimal, mas se operando entre inteiros o resultado é convertido para float. Veja os exemplos abaixo:
 \begin{lstlisting}[language=Python]
   print(1/2)
   print(1./2.)
   print(1./2)
 \end{lstlisting}
-No primeiro caso, ``1'' e ``2'' são ambos inteiros e o Python entende que resultado deve ser também um inteiro. No segundo caso ``1.'' e ``2.'' são ambos do tipo float e o Python entende que o resultado também deve ser do tipo float. O terceiro caso é um mix, ``1.'' é um float e ``2'' é um inteiro, o resultado será do tipo float.
+Cuidado que há uma mudança entre o Python 2 e o Python 3, neste aspecto.
 
 O Python também possui dois outros tipos de ``divisão'' que são menos comuns que divisão usual, são elas:
 \[ \begin{array}{cc}
