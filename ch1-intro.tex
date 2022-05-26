@@ -771,7 +771,18 @@ Você deve obter algo como mostrado na imagem \ref{fig:first-plot}
     \label{fig:first-plot}
 \end{figure}
 
-Construção de um barra de progresso para algorítimos que levem tempo
+Algumas bibliotecas serão corriqueiramente utilizadas em todo este texto. São elas
+
+\begin{itemize}
+    \item {\bf numpy:} O Numerical Python, é uma biblioteca que permite manipular objetos conhecidos como arrays, que a grosso modo são matrizes multidimensionais. Além disso, o Numpy possui uma coleção de rotinas para processar esses arrays. Discutimos vários usos do Numpy no Apêndice \ref{a:numpy}
+    \item {\bf scipy:} O Scientific Phyton contém várias ferramentas dedicadas a problemas comuns em computação científica. Seus diferentes sub-módulos correspondem a diferentes aplicações, tais como interpolação, integração, otimização, processamento de imagens, estatísticas, funções especiais, etc. Em geral, antes de implementar uma rotina, vale a pena verificar se o processo desejado não está implementado em SciPy. E nesse caso você não precisa reinventar a roda. Vale lembrar que o scipy utliza o numpy.
+    \item {\bf matplotlib:} O Matplotlib é uma biblioteca com a funcionalidade de criar gráficos 2D. Em palavras o matplotlib usa o numpy para transformar dados em gráficos. O módulo pyplot do matplotlib permite operar de maneira análoga ao software comercial MATLAB (que talvez seja a ferramenta mais utilizada em simulações numéricas).
+    \item {\bf sympy:} O Symbolic Python é uma biblioteca que fornece ferramentas para computação algébrica de maneira análoga a softwares comerciais como o Mathematica e o Maple. A computação algébrica ou computação simbólica  permite realizar várias tarefas matemáticas simbolicamente e obter respostas exatas para muitos problemas matemáticos, como a fatoração de números inteiros e polinômios, operações com matrizes, resolução de sistemas lineares e não lineares de equações, operações com números complexos, simplificações de expressões, cálculo de limites, derivadas e integrais, resolução de equações diferenciais.
+\end{itemize}
+
+Você também pode construir suas próprias bibliotecas. Isso é mais fácil do que você pode imaginar, de fato todo programa Python é um biblioteca! Qualquer código em Python quando salvo programa terminando '.py' em seu nome de arquivo (cuidado o Jupyter-notebook usa .ipynb) pode ser importado por qualquer outro programa Python. Apenas use {\tt from <filename> import <function(s)>}. Imagine por exemplo que você criou um código chamado {\tt gavitation.py}, esse código inclui um função {\tt grav-field} que calcula o campo gravitacional de um objeto. Se você quiser utilizar essa função em um novo código basta fazer {\tt from gravitation impor grav-field}.
+
+Na internet você pode encontrar diversas bibliotecas gratuitas. A depender da área que você estudando vale a pena se familiarizar com as bibliotecas que outros pesquisadores escreveram para facilitar a totina de pesquisas naquela área. Algumas outras bibliotecas adicionam amenidades ao Python. Um exemplo é a {\bf tqdm}. Imagine que seu código leva bastante tempo para ser computado, a   {\bf tqdm} permite construir fácilmente uma barra de progresso para algorítimo. Veja o exemplo:
 
 \begin{lstlisting}[language=Python]
 from tqdm.notebook import tqdm
@@ -781,18 +792,71 @@ for i in tqdm(range(10)):
     sleep(3)
 \end{lstlisting}
 
+Uma última coisa a se considerar é que sempre que você importa um pacote, ele sobrescreve qualquer coisa com o mesmo nome. Isso pode causar problemas. Por exemplo, tanto o {\bf math} quanto o {\bf numpy}
+possuem funções trigonométricas. Mas as funções trigonométricas do pacote {\bf math} apenas atuam em números, enquanto as funções do numpy são capazes de operar em matrizes inteiras de uma só vez. Com isso se você importar primeiro o {\bf numpy} e em seguida o {\bf math}, o comando {\tt sin} é o comando do {\bf math} e não consegue operar em arrays do {\bf numpy.} Compare os dois códigos abaixo e veja que o primeiro apresenta um erro.
+
+\begin{lstlisting}[language=Python]
+#Importando o primeiro o numpy
+from numpy import *
+from math import *
+
+x = arange(10)*pi/10
+y = sin(x)
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python]
+#Importando o primeiro o math
+from math import *
+from numpy import *
+
+x = arange(10)*pi/10
+y = sin(x)
+\end{lstlisting}
+
+Se você realmente precisas usar simultâneamente o {\bf math} e o {\bf numpy} seria melhor usar algo como
+
+\begin{lstlisting}[language=Python]
+#Importando o primeiro o math
+import numpy as np
+import math
+
+x = np.arange(10)*np.pi/10
+y = np.sin(x)
+
+z = math.sin(np.pi/2)
+\end{lstlisting}
+
 \section{Gráficos Simples}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.2]{Images/anatomy.png}
+    \caption{Elementos de um gráfico no Matplotlib. Fonte: matplotlib.org}
+    \label{fig:anatomy}
+\end{figure}
 
 \section{Lendo dados de arquivos}
 
 \section{Exercícios}
 \begin{enumerate}
     \item Comente com $\#$ os códigos dados como exemplo nesse capítulo, indicado o que cada linha ou bloco instrui o computador a fazer.
-    \item Escreva um programa que pede para o usuário escrever um número inteiro entre $0$ e um milhão, e então escreve esse número por extenso.
+    \item Use list Comprehensions para:
+    \begin{enumerate}
+        \item Construir uma lista com todos os quadrados perfeitos entre 100 e 200.
+        \item Construir uma lista com apenas os ímpares da lista {\tt numbers = [3,5,45,97,32,22,10,19,39,43]}
+        \item Contar o número de espaços em branco em uma {\tt string}.
+    \end{enumerate}
+    \item Escreva um programa que pede para o usuário escrever um número inteiro entre $0$ e $999.999$, e então escreve esse número por extenso.
+    \item Escreva uma função Python que receba um inteiro positivo e retorne a soma do cubo de todos os inteiros positivos menores que o número especificado.
+    \item Escreva uma função Python que recebe um inteiro positvo e retorna o menor digito deste número.
     \item Escreva uma função que calcule o fatorial de um número inteiro. A seguir compare a eficiência do seu código com as funções factorial disponíveis nos pacotes {\bf math} e {\bf numpy}. Use o {\tt \%timeit} para isso.
     \item Escreva uma função para calcular a função $\text{sinc}(x)$ que dada por
     \[ \text{sinc } x = \frac{\sin x}{x}.\]
     Garanta que a função calcule corretamente o caso $x=0$ (esse é um dos limites fundamentais que você aprendeu em Cálculo I).
+    \item Crie uma lista $x=[1,2,\cdots,1000]$. Crie uma lista $y=[f(1), f(2), \cdots, f(1000)]$ onde 
+    \[ f(n) = \left(1 + \frac{1}{n}\right)^n - e\]
+    (tente utilizar o pacote numpy). Faça um plot do gráfico de $f(n)$. O que você conclui sobre
+    \[ \lim_{n \rightarrow + \infty} \left(1 + \frac{1}{n}\right)^n = ? \]
     \item Um número $T$ é chamado triangular quando existe um inteiro $N$ tal que
     \[ T = 1+2+ \cdots+ N.\]
     Por exemplo, $3(=1+2)$, $6(=1+2+3)$, $10(=1+2+3+4)$ são números triangulares. Construa uma função que calcula o $n$-ésimo número triangular.
