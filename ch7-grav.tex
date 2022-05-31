@@ -103,7 +103,8 @@ class Planet: # Create Class Planet
     def move(self): # Move Planet
         self.r += dt*self.vr #Up date r positions
         self.theta += dt*self.vtheta #Up date Y positions
-        self.rtraj = np.append(self.rtraj, self.r) #Up date r trajectory
+        #Update r trajectory
+        self.rtraj = np.append(self.rtraj, self.r)
         self.thetatraj = np.append(self.thetatraj, self.theta) #Up date theta trajectory
         potential_f = - GM*self.mass/self.r**2
         centrifugal_f = self.L**2/(self.mass*self.r**3)

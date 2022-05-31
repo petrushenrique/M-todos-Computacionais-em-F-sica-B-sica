@@ -1,0 +1,44 @@
+\chapter{Óptica Física e Geométrica}
+
+If all is in phase the wavefront is parallel to $x$. If we now want an angle $\theta$ we have $d=\eta \sin \theta$. The wave propagates with $\cos (\omega t - k r)$, and we may set $t=0$. So if we want the point at the end of $d$ being in phase the source at $\eta$ must be at phase $\phi = kd$. The left point in the sketch I set as phase $\phi = 0$. I am free to do so and I decide to measure all with respect to this point. This point, hence, also defines the wave front. Now the point at $\eta$ gives me a wave $A\cos(kr)$, were $r=\sqrt{(x - \eta)^2+y^2}$, but wait: I want it to have a phase so it is $A \cos(kr -\phi(x))$. Now I want this wave to have a phase zero at the wave front (sort of by definition). In other words the argument of the cosine must be zero for $r=d$, i.e. $kd(\eta) - \phi(\eta)=0$. Only then this is part of the wavefront. So $kd(\eta)=\phi(\eta)$ and plugging $d=\eta \sin \theta$ gives, hence, $\phi=k\eta \sin \theta$.
+
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Princípio de Huygens}, label={lst:Huygens}]
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+
+def f(x,y,phi=0): return np.cos(2*np.pi*np.sqrt(x**2+y**2)-phi)
+
+def wavephase(x,y,theta=0,pnts=100):
+    out=0
+    for pt in np.linspace(-20,20,pnts):
+        out+=f(x-pt,y,2*np.pi*pt*np.sin(theta))
+    return out
+
+degree=np.pi/180.
+
+n = 120
+x = np.linspace(-10,10,2*n)
+y = np.linspace(-10,0,n)
+X,Y = np.meshgrid(x,y)
+
+fff=15
+fig=plt.figure()
+ax=fig.add_subplot(3,1,1)
+bx=fig.add_subplot(3,1,2)
+cx=fig.add_subplot(3,1,3)
+ax.contourf(X, Y, f(X,Y), 22, alpha=1, cmap="Blues")
+bx.contourf(X, Y, wavephase(X,Y, theta=0*degree), 22, alpha=1, cmap="Blues")
+bx.scatter(np.linspace(-20,20,100)[25:-25],np.linspace(-20,20,100)[25:-25]*0,
+    c='b',s=45)
+cx.contourf(X, Y, wavephase(X,Y, theta=fff*degree), 22, alpha=1, cmap="Blues")
+cx.plot([0,10*np.cos(fff*degree)],[0,-10*np.sin(fff*degree)],color='#ffaa00')
+cx.scatter(np.linspace(-20,20,100)[25:-25],np.linspace(-20,20,100)[25:-25]*0,
+    c=np.linspace(-20,20,100)[25:-25],s=45)
+for ma in [ax,bx,cx]:
+    ma.set_xlim([-10,10])
+    ma.set_ylim([-10,0])
+plt.show()
+\end{lstlisting}
+
+Problemas do Haliday Capítulos 34 a 36
