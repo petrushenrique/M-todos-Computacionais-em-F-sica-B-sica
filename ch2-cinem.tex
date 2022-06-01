@@ -1,6 +1,35 @@
 \chapter{Cinemática}
 Problemas do Haliday Capítulos 2 a 4
 
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Lançamento de Projeteis}, label={lst:projeteis1}]
+from math import *
+import matplotlib.pyplot as plt
+
+#Input
+theta = float(input('Qual o angulo de Lancamento? (em graus)'))
+v = float(input('Qual a velocidade de Lancamento? (em m/s )'))
+theta = pi*theta/180
+
+# Condicao Inicial
+x0 = 0
+y0 = 0
+vx0 = v*cos(theta)
+vy0 = v*sin(theta)
+
+step = 200
+g = -9.8
+t = [i*0.01 for i in range(step+1)]
+x = [i*vx0 + x0 for i in t]
+y = [ g/2*i**2 + vy0*i+y0 for i in t]
+
+plt.scatter(x,y)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.show()
+\end{lstlisting}
+
+
+
 {\bf Problema 1:}
 Uma bola é lançada de uma torre de altura $h$ com velocidade inicial zero. Escreva um
 programa que pede ao usuário para digitar a altura em metros da torre e depois calcula
