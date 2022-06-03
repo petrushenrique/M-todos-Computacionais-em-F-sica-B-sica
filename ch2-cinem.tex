@@ -28,6 +28,46 @@ plt.ylabel('y')
 plt.show()
 \end{lstlisting}
 
+\section{Movimento Circular}
+
+
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Movimento da Terra e Lua ao Redor do Sol}, label={lst:earth-moon1}]
+
+import numpy as np
+import matplotlib.pyplot as plt
+plt.rcParams["figure.figsize"] = (8,8)
+
+pi = np.pi
+
+
+#Planetary data
+earth_sn = 149597870
+moon_earth =384400
+R_e = earth_sn/moon_earth
+R_m = 1
+T_e = 12 # Lunar periods
+T_m = 1 # Lunar periods
+step = 0.01
+print(R_m/R_e)
+
+t = np.linspace(0,T_e, int(T_e/0.01))
+
+#Earth motion
+
+x_e = R_e*np.cos(2*pi*t/T_e)
+y_e = R_e*np.sin(2*pi*t/T_e)
+
+# moon motion
+
+x_m = x_e+R_m*np.cos(2*pi*t/T_m)
+y_m = y_e+R_m*np.sin(2*pi*t/T_m)
+
+
+plt.plot(x_e[20:90], y_e[20:90])
+plt.plot(x_m[20:90], y_m[20:90])
+
+\end{lstlisting}
+
 
 
 {\bf Problema 1:}
@@ -35,3 +75,4 @@ Uma bola é lançada de uma torre de altura $h$ com velocidade inicial zero. Esc
 programa que pede ao usuário para digitar a altura em metros da torre e depois calcula
 e imprime o tempo que a bola leva até atingir o solo, ignorando a resistência do ar. Use
 seu programa para calcular o tempo para uma bola cair de uma torre de 100 m de altura
+

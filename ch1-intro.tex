@@ -831,12 +831,60 @@ z = math.sin(np.pi/2)
 
 \section{Gráficos Simples}
 
+Como vimos o {\bf matplotlib} é uma ferramenta útil para construção de gráficos. Ela não é a única mas será a que mais utilizaremos nesse texto. Os gráficos do matplotlib são criados apartir de arrays, o que torna o matplotlib na prática dependente do {\bf numpy}. Gráficos comuns podem ser criados de maneira simples e com alta qualidade. 
+
+\begin{itemize}
+    \item pylab: conjunto de funções disponíveis em matplotlib.pylab que permite a geração de código similar ao MATLAB.
+    \item frontend ou API: conjunto de classes que realizam o trabalho pesado, criando as figuras, texto, linhas etc. Essa é uma interface abstrata que independe da saída.
+    \item backends: conjunto de funções que dependem do dispositivo de saída (display). Por exemplo, PS para gráficos em PostScript, SVG gera gráficos em Scalable Vector Graphics, Agg cria figuras no formato PNG, GTK permite que os gráficos sejam incluídos em aplicações GTK+, e assim para PDF, WxWidgets, Tkinter, etc
+\end{itemize}
+
+O conjunto de funções disponível em {\tt matplotlib.pyplot} permitem que você crie uma figura, uma área para exibir o gráfico na figura, desenhe linhas na área do gráfico, decore o gráfico com rótulos, etc. A sintaxe utilizada é semelhante ao MATLAB.
+
+Cada função do pyplot muda uma parte da figura, por exemplo, cria uma figura, cria uma área dentro da figura para desenhar um gráfico, desenha linhas em um gráfico, decora o gráfico com rótulos, etc. No pyplot, vários estados são preservados após a chamada de uma função dentro de um contexto, simplificando assim o seu trabalho sobre a figura ou área de desenho atuais. Assim, você pode ter uma figura complexa formada por várias áreas de desenho distintas, e o pyplot mantém para você informações sobre para cada área de desenho. Vejamos o exemplo abaixo: 
+
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+data1 = [10,5,2,4,6,8]
+data2 = [ 1,2,4,8,7,4]
+x = 10*np.array(range(len(data1)))
+
+plt.plot( x, data1, 'go') # green bolinha
+plt.plot( x, data1, 'k:', color='orange') # linha pontilha orange
+
+plt.plot( x, data2, 'r^') # red triangulo
+plt.plot( x, data2, 'k--', color='blue')  # linha tracejada azul
+
+plt.axis([-10, 60, 0, 11])
+plt.title("Um Plot com PyPlot")
+
+plt.grid(True)
+plt.xlabel("eixo x")
+plt.ylabel("eixo y")
+plt.show()
+\end{lstlisting}
+
+
+A Fig. \ref{fig:anatomy} mostra as diversas partes de uma figura.
+
+
 \begin{figure}
     \centering
     \includegraphics[scale=0.2]{Images/anatomy.png}
     \caption{Elementos de um gráfico no Matplotlib. Fonte: matplotlib.org}
     \label{fig:anatomy}
 \end{figure}
+
+\begin{enumerate}
+    \item {\bf Figura}: Corresponde a figura como um todo. Isso inclui os eixos, objetos especiais como títulos, legendas, barras de cores,  e até mesmo subfiguras inseridas.
+    \item {\bf Eixos}: Um Eixo é um objeto anexado a uma Figura que contém uma região para plotagem de dados e geralmente inclui dois objetos (ou três no caso de 3D) que fornecem marcas e rótulos de marca para fornecer escalas para os dados nos Eixos. Cada Eixo também tem um título (definido por meio de set\textunderscore title()), um rótulo x (definido por meio de set\textunderscore xlabel()) e um rótulo y definido por set\textunderscore ylabel()).
+
+A classe Axes e suas funções de membro são o principal ponto de entrada para trabalhar com a interface OOP e têm a maioria dos métodos de plotagem definidos nelas (por exemplo, ax.plot(), mostrado acima, usa o método plot)
+\end{enumerate}
+
 
 \section{Lendo dados de arquivos}
 
