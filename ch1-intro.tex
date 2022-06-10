@@ -311,7 +311,7 @@ type(dimensao),type(FortyTwo),type(pi),type(z),type(Fibonacci_5)
 
 Existem diversos tipos diferentes de variáveis em Python. Os dois tipos mais comuns 
 podem ser divididos em {\it tipos numéricos} e {\it tipos sequenciais}. Tipos numéricos
-contêm dados que representam um números únicos, como por exemplo ``42'', ``3,1415'' e ``1 + 3i11. Tipos sequenciais contêm dados com vários objetos, que podem ser números ou
+contêm dados que representam um números únicos, como por exemplo ``42'', ``3,1415'' e ``1 + 3j''. Tipos sequenciais contêm dados com vários objetos, que podem ser números ou
 caracteres, ou mesmo coleções de diferentes tipos de objetos. Um dos pontos fortes do Python é que ele automaticamente converte entre tipos de variáveis conforme é necessário e se possível. Essa mutabilidade das variáveis também pode levar a armadilhas que produzem erros no código. Discutiremos aqui os tipos numéricos e sequenciais, você pode ver mais sobre outros tipos no apêndice \ref{ap:1.1}.
 
 \subsubsection{Tipos Numéricos}
@@ -319,7 +319,7 @@ As variáveis numéricas em Python, podem ser de 3 tipos: inteiros (type: int ),
 
 \paragraph{Integer:} O inteiro é o tipo numérico mais simples em Python. Os inteiros são
 usados para contar itens ou acompanhar quantas vezes você fez alguma coisa. Eles podem ser negativos ou positivos, ou seja eles correspondem ao que chamamos de números inteiros. Lembre que como já discutimos na seção \ref{sc:ops}, variáveis do tipo {\tt int} não se dividem como esperado: Em Python, {\tt 1/2} resulta em {\tt 0}, porque $2$ cabe em $1$ zero vezes.
-\paragraph{Float:} O tipo “floating point” (i.e. ponto flutuante) é um número que contém um ponto decimal dividindo sua parte inteira de sua parte fracionária. Por exemplo, $3.1415$ e $9.81$ são do tipo float. Tipos float também podem ser escritos usando notação científica por exemplo {\tt 6.022e23} corresponde a $6.022 \times 10^23$ é um float. 
+\paragraph{Float:} O tipo “floating point” (i.e. ponto flutuante) é um número que contém um ponto decimal dividindo sua parte inteira de sua parte fracionária. Por exemplo, $3.1415$ e $9.81$ são do tipo float. Tipos float também podem ser escritos usando notação científica por exemplo {\tt 6.022e23} corresponde a $6.022 \times 10^{23}$ é um float. 
 \paragraph{Complex:} Números complexos são embutidos no Python, que usa $j=\sqrt{-1}$ para unidade imaginária. Essas variáveis são do tipo $a+bj$, onde a parte real do número é $a$ e a parte imaginária é $b$. O Python executa corretamente as operações elementares com números complexos.
 
 Números em Python N são objetos (na verdade, tudo em Python é um objeto) e têm certos
@@ -843,7 +843,7 @@ O conjunto de funções disponível em {\tt matplotlib.pyplot} permitem que voc�
 
 Cada função do pyplot muda uma parte da figura, por exemplo, cria uma figura, cria uma área dentro da figura para desenhar um gráfico, desenha linhas em um gráfico, decora o gráfico com rótulos, etc. No pyplot, vários estados são preservados após a chamada de uma função dentro de um contexto, simplificando assim o seu trabalho sobre a figura ou área de desenho atuais. Assim, você pode ter uma figura complexa formada por várias áreas de desenho distintas, e o pyplot mantém para você informações sobre para cada área de desenho. Vejamos o exemplo abaixo: 
 
-\begin{lstlisting}
+\begin{lstlisting}[language=Python]
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -880,13 +880,140 @@ A Fig. \ref{fig:anatomy} mostra as diversas partes de uma figura.
 
 \begin{enumerate}
     \item {\bf Figura}: Corresponde a figura como um todo. Isso inclui os eixos, objetos especiais como títulos, legendas, barras de cores,  e até mesmo subfiguras inseridas.
-    \item {\bf Eixos}: Um Eixo é um objeto anexado a uma Figura que contém uma região para plotagem de dados e geralmente inclui dois objetos (ou três no caso de 3D) que fornecem marcas e rótulos de marca para fornecer escalas para os dados nos Eixos. Cada Eixo também tem um título (definido por meio de set\textunderscore title()), um rótulo x (definido por meio de set\textunderscore xlabel()) e um rótulo y definido por set\textunderscore ylabel()).
+    \item {\bf Eixos}: Um Eixo é um objeto anexado a uma Figura que contém uma região para plotagem de dados e geralmente inclui dois objetos (ou três no caso de 3D) que fornecem marcas e rótulos de marca para fornecer escalas para os dados nos Eixos. Cada Eixo também tem um título (definido por meio de \lstinline{set_title()}), um rótulo x (definido por meio de \lstinline{set_xlabel()}) e um rótulo y definido por \lstinline{set_ylabel()}).
 
-A classe Axes e suas funções de membro são o principal ponto de entrada para trabalhar com a interface OOP e têm a maioria dos métodos de plotagem definidos nelas (por exemplo, ax.plot(), mostrado acima, usa o método plot)
+A classe Axes e suas funções de membro são o principal ponto de entrada para trabalhar com a interface OOP e têm a maioria dos métodos de plotagem definidos nelas (por exemplo, \lstinline{ax.plot()}, mostrado acima, usa o método plot)
 \end{enumerate}
 
 
 \section{Lendo dados de arquivos}
+
+
+Em várias áreas da Física é necessário possuir conhecimentos em manipulação de arquivos, seja para armazenar resultados de um experimento ou até mesmo para receber arquivos como parâmetro para a execução de uma simulação. Neste seção abordaremos como ler informações armazenadas em aquivos. Existem centenas de formatos para os dados em um arquivo, e isso é usualmente representado pela extensão do nome do arquivo. Nessa abordagem introdutória, vamos discutir arquivos {\tt .txt}.
+
+
+Para abrir um arquivo  {\tt .txt} com Python utilizamos o comando {\tt open}. A sintaxe é {\tt open(<arquivo>, <modo>)}, onde {\tt <arquivo>} é a identificação do arquivo (i.e. localização e o nome do arquivo) que será aberto, {\tt <modo>} a forma de abertura do arquivo. Essa função também pode ser utilizada para criar novos arquivos, sendo o que diferencia abertura de criação é o valor inserido no campo “modo” durante a chamada da função.
+
+Os valores mais comumente utilizados para {\tt modo} são:
+\begin{itemize}
+    \item {\tt 'r'}: Somente leitura. Este é o modo padrão, i.e. se a opção modo for omitida o arquivo será aberto, você poderá ler os dados nele contidos, mas não poderá altera-los.
+    \item {\tt 'w'}: Escrita. Caso o arquivo já exista, ele será apagado e um novo arquivo vazio será criado. Caso o arquivo não exista, o Python criará um arquivo vazio.
+    \item {\tt 'a'}: Acrescentar. Adiciona o novo conteúdo ao fim do arquivo.
+\end{itemize}
+
+Depois de aberto, podemos realizar a leitura dos dados contidos no arquivo usando as funções: {\tt read()}, {\tt readline()} ou {\tt readlines()}. A função {\tt read(n)} lê até $n$ bytes do arquivo. Caso o valor não seja informado, a função lê o arquivo inteiro. A função {\tt readline()} retorna uma string contendo a primeira linha do arquivo. Por fim, a função {\tt readlines()} retorna uma lista de strings, sendo cada elemento uma linha do arquivo. Para entendermos, o funcionamento, vamos pegar o arquivo {\tt br-sem-acentos.txt} na página do github destas notas e salva-lo no mesmo diretório em executaremos o nosso código. Depois disso vamos abrir este arquivo no modo somente leitura. Veja o exemplo:
+\begin{lstlisting}[language=Python]
+file = open('br-sem-acentos.txt', 'r')
+file.read()
+\end{lstlisting}
+O resultado deve ser uma estranha lista de palavras separadas por \lstinline{'\n'}. O \lstinline{'\n'} indica uma quebra de linha (``new line''). Podemos ver o efeito deste caractere de formatação com o comando {\tt print(f.read()}. Como dissemos o comando {\tt readlines()} lê as linhas do arquivo e constrói uma lista de strings com ela. Ou seja cada palavra separada por \lstinline{'\n'} será um elemento da lista. Como teste tentemos:
+\begin{lstlisting}[language=Python]
+words=file.readlines()
+print(words[0:20])
+\end{lstlisting}
+O resultado são uma lista com as 20 primeiras palavras do arquivo. Note que ainda se mantém o \lstinline{'\n'}. Podemos eliminar esse caractere especial, fazendo:
+\begin{lstlisting}[language=Python]
+words = [ (word.replace('\n','')).lower() for word in words]
+print(words[0:20])
+\end{lstlisting}
+
+Uma vez criada a lista de palavras, podemos utiliza-la para obter dados estatísticos sobre as palavras como no exemplo abaixo.
+
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Estatísticas das }, label={lst:isprime}]
+import string
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+
+letters = string.ascii_lowercase
+
+f = open('br-sem-acentos.txt', 'r')
+words = f.readlines()
+words = [ (word.replace('\n','')).lower() for word in words]
+
+
+# Mediar Frequencia das Letras no conjunto de palavras
+frequencia = np.zeros(len(letters))
+for n,l in enumerate(tqdm(letters)):
+    for word in words:
+        frequencia[n] += word.count(l)
+frequencia = frequencia/frequencia.sum()
+
+# Medir frequencia dos comprimentos
+comp_list = [len(word) for word in words]
+max_size = np.array(comp_list).max()
+comp_freq = [comp_list.count(n) for n in range(1,max_size)]
+
+# Contar a frequencia das Letras em cada Posicao
+freq_1a_letra = np.zeros(len(letters))
+freq_f_letra = np.zeros(len(letters))
+
+for l in letters:
+    temp_words_1 = [word for word in words if word[0]==l]
+    temp_words_f = [word for word in words if word[len(word)-1]==l]
+    freq_1a_letra[letters.index(l)] = len(temp_words_1)
+    freq_f_letra[letters.index(l)] = len(temp_words_f)
+    
+freq_1a_letra = freq_1a_letra/freq_1a_letra.sum()
+freq_f_letra  = freq_f_letra/freq_f_letra.sum()
+
+# Contar o numero de Vogais e a frequencia
+def conta_vogais(word):
+    return (word.count('a')+word.count('e')+word.count('i')
+            +word.count('o')+word.count('u')
+
+n_vogais = [conta_vogais(word) for word in words]
+n_vog_freq = [n_vogais.count(i)/len(words) for i in set(n_vogais)]
+
+# Criar Plots
+
+plt.figure(figsize=(13, 13))
+# Plot Frequencia das Letras
+plt.subplot(2, 2, 1)
+plt.bar( list(letters), frequencia, label='Frequencia Total das Letras',
+        width=.5, align='center')
+plt.bar( list(letters), freq_1a_letra, label='Frequencia como a 1a Letra',
+        width=.5, align='edge', alpha = 0.4)
+plt.bar( list(letters), freq_f_letra, label='Frequencia como a ultima Letra',
+        width=.5, align='edge', alpha = 0.4)
+plt.title('Frequencia das Letras')
+plt.legend(prop={'size': 8})
+
+# Plot Frequencia dos Comprimentos
+plt.subplot(2, 2, 2)
+plt.bar( np.arange(1,max_size), comp_freq)
+plt.xlabel('Comprimento')
+plt.ylabel('Frequencia')
+plt.title('Frequencia do Comprimento das Palavras')
+
+
+#Frequencia do numero de Vogais
+plt.subplot(2, 2, 3)
+plt.bar(np.arange(0,12), n_vog_freq)
+plt.xlabel('Numero de Vogais')
+plt.ylabel('Frequencia')
+plt.title('Frequencia do # de vogais em uma palavra')
+
+#Comprimento x numero de vogais
+plt.subplot(2, 2, 4)
+plt.scatter(n_vogais, comp_list)
+plt.xlabel('Numero de Vogais')
+plt.ylabel('Frequencia')
+plt.title('Frequencia do # de vogais em uma palavra')
+
+plt.show()
+
+\end{lstlisting}
+
+A saída deve ser análoga a Fig. \ref{fig:letras}.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.4]{Images/letras.png}
+\caption{Estatísticas das palavras da Língua Portuguesa}\label{fig:letras}
+\end{figure}
+
+
 
 \section{Exercícios}
 \begin{enumerate}
@@ -894,7 +1021,7 @@ A classe Axes e suas funções de membro são o principal ponto de entrada para 
     \item Use list Comprehensions para:
     \begin{enumerate}
         \item Construir uma lista com todos os quadrados perfeitos entre 100 e 200.
-        \item Construir uma lista com apenas os ímpares da lista {\tt numbers = [3,5,45,97,32,22,10,19,39,43]}
+        \item Construir uma lista com apenas os ímpares da lista \\{\tt numbers = [3,5,45,97,32,22,10,19,39,43]}
         \item Contar o número de espaços em branco em uma {\tt string}.
     \end{enumerate}
     \item Escreva um programa que pede para o usuário escrever um número inteiro entre $0$ e $999.999$, e então escreve esse número por extenso.

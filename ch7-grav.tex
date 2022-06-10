@@ -149,7 +149,8 @@ class Planet: # Create Class Planet
         self.theta += dt*self.vtheta #Up date Y positions
         #Update r trajectory
         self.rtraj = np.append(self.rtraj, self.r)
-        self.thetatraj = np.append(self.thetatraj, self.theta) #Up date theta trajectory
+        #Up date theta trajectory
+        self.thetatraj = np.append(self.thetatraj, self.theta)
         potential_f = - GM*self.mass/self.r**2
         centrifugal_f = self.L**2/(self.mass*self.r**3)
         f_eff = potential_f +  centrifugal_f

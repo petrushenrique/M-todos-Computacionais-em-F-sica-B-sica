@@ -68,6 +68,9 @@
 \setlength\epigraphwidth{.45\textwidth}
 \setlength\epigraphrule{0pt}
 
+\lstset{language=Python}
+
+
 \begin{document}
 \include{cover}
 	
@@ -113,14 +116,7 @@ Problemas do Haliday Capítulos 10 e 11
 
 
 
-\chapter{O Campo Elétrico}
-Problemas do Haliday Capítulo 21 a 25
-
-Calcule a força de atração entre dois anéis com cargas uniformemente distribuídas $+q$ e $-q$. O eixo dos anéis coincide com o eixo $x$ e cada anel tem raio $R$.
-
-Problema Repetir para um disco e para uma esfera
-
-Um anel de raio $R = 1 cm$ esta uniformemente carregado com carga $Q$. Um elétron se move no plano do anel. (a) Com  $Q= -100 \mu C$ Encontre a velocidade do elétron para que ele se mova  em u
+\include{ch12-Efield}
 
 \chapter{Circuitos Elétricos}
 Problemas do Haliday Capítulo 26 e 27
@@ -208,35 +204,16 @@ plt.show()
 \end{lstlisting}
 
 
-\chapter{Construção de Gráficos com Matplotlib}
-\section{Mais obções básicas com gráficos}
-\section{Histogramas}
-\section{Plots de Contorno}
-\section{Gráficos em 3D}
-\section{Animações}
+\include{AC-Matplotlib}
 
 \chapter{O Scipy}
 
 \chapter{Computação Algébrica com Sympy}
 
 
-\chapter{Elementos de Cálculo Numérico}
-\section{Soluções Numéricas}
-\section{Integração Numérica}
-\section{Diferenciação Numérica}
-\section{Equações Diferenciais Ordinárias}
-\subsection{Método de Euler}
-\subsection{Variações do Método de Euler}
-\subsection{Método de Runge-Kutta}
-\section{Método de Monte Carlos}\label{sc:Monte_Carlo}
-\section{Métodos Estocásticos}
+\include{AF-numeric}
 
 
-
-\section{Equações Diferenciais Parciais}
-\subsection{Equação de Laplace}
-\subsection{Equação da Onda}
-\subsection{Equação do Calor}
 
 \chapter{Usando \LaTeX}\label{a:latex}
 
