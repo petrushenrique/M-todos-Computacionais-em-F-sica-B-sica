@@ -871,16 +871,7 @@ plt.show()
 A Fig. \ref{fig:anatomy}, que foi gerada com o código abaixo, mostra as diversas partes de uma figura do matplotlib. Alguns elementos são auto-explicativos.
 
 \begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Código com os elementos de uma figura do matplotlib}, label={lst:fig-anatomy}]
-
-
-\end{lstlisting}
-
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.7]{Images/anatomy.png}
-    \caption{Elementos de uma figure do Matplotlib. Fonte: matplotlib.org}
-    \label{fig:anatomy}
-    import numpy as np
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator, MultipleLocator
 
@@ -1016,6 +1007,15 @@ ax.annotate('', xy=(3.15, 0.0), xytext=(3.45, 0.45),
 
 
 plt.show()
+
+\end{lstlisting}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.7]{Images/anatomy.png}
+    \caption{Elementos de uma figure do Matplotlib. Fonte: matplotlib.org}
+    \label{fig:anatomy}
+
 \end{figure}
 
 \begin{enumerate}
