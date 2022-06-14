@@ -831,7 +831,7 @@ z = math.sin(np.pi/2)
 
 \section{Gráficos Simples}
 
-Como vimos o {\bf matplotlib} é uma ferramenta útil para construção de gráficos. Ela não é a única mas será a que mais utilizaremos nesse texto. Os gráficos do matplotlib são criados apartir de arrays, o que torna o matplotlib na prática dependente do {\bf numpy}. Gráficos comuns podem ser criados de maneira simples e com alta qualidade. 
+Como vimos o {\bf matplotlib} é uma ferramenta útil para construção de gráficos. Ela não é a única, mas será a que mais utilizaremos nesse texto. Os gráficos do matplotlib são criados apartir de arrays, o que torna o matplotlib na prática dependente do {\bf numpy}. Gráficos comuns podem ser criados de maneira simples e com alta qualidade. 
 
 \begin{itemize}
     \item pylab: conjunto de funções disponíveis em matplotlib.pylab que permite a geração de código similar ao MATLAB.
@@ -868,21 +868,161 @@ plt.show()
 \end{lstlisting}
 
 
-A Fig. \ref{fig:anatomy} mostra as diversas partes de uma figura.
+A Fig. \ref{fig:anatomy}, que foi gerada com o código abaixo, mostra as diversas partes de uma figura do matplotlib. Alguns elementos são auto-explicativos.
 
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Código com os elementos de uma figura do matplotlib}, label={lst:fig-anatomy}]
+
+
+\end{lstlisting}
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.2]{Images/anatomy.png}
-    \caption{Elementos de um gráfico no Matplotlib. Fonte: matplotlib.org}
+    \includegraphics[scale=0.7]{Images/anatomy.png}
+    \caption{Elementos de uma figure do Matplotlib. Fonte: matplotlib.org}
     \label{fig:anatomy}
+    import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.ticker import AutoMinorLocator, MultipleLocator
+
+np.random.seed(19680801)
+
+X = np.linspace(0.5, 3.5, 100)
+Y1 = 3+np.cos(X)
+Y2 = 1+np.cos(1+X/0.75)/2
+Y3 = np.random.uniform(Y1, Y2, len(X))
+
+fig = plt.figure(figsize=(8, 8))
+ax = fig.add_subplot(1, 1, 1, aspect=1)
+
+
+
+def minor_tick(x, pos):
+    if not x % 1.0:
+        return ""
+    return f"{x:.2f}"
+
+ax.xaxis.set_major_locator(MultipleLocator(1.000))
+ax.xaxis.set_minor_locator(AutoMinorLocator(4))
+ax.yaxis.set_major_locator(MultipleLocator(1.000))
+ax.yaxis.set_minor_locator(AutoMinorLocator(4))
+# FuncFormatter is created and used automatically
+ax.xaxis.set_minor_formatter(minor_tick)
+
+ax.set_xlim(0, 4)
+ax.set_ylim(0, 4)
+
+ax.tick_params(which='major', width=1.0)
+ax.tick_params(which='major', length=10)
+ax.tick_params(which='minor', width=1.0, labelsize=10)
+ax.tick_params(which='minor', length=5, labelsize=10, labelcolor='0.25')
+
+ax.grid(linestyle="--", linewidth=0.5, color='.25', zorder=-10)
+
+ax.plot(X, Y1, c=(0.25, 0.25, 1.00), lw=2, label="Plot Azul", zorder=10)
+ax.plot(X, Y2, c=(1.00, 0.25, 0.25), lw=2, label="Plot Vermelho")
+ax.plot(X, Y3, linewidth=0,
+        marker='d', markerfacecolor='g', markeredgecolor='k')
+
+ax.set_title("Elementos de uma figura do Matplotlib", fontsize=20, verticalalignment='bottom')
+ax.set_xlabel("Label do eixo X")
+ax.set_ylabel("Label do eixo Y")
+
+ax.legend(loc="upper right")
+
+
+
+def circle(x, y, radius=0.15):
+    from matplotlib.patches import Circle
+    from matplotlib.patheffects import withStroke
+    circle = Circle((x, y), radius, clip_on=False, zorder=10, linewidth=1,
+                    edgecolor='black', facecolor=(0, 0, 0, .0125),
+                    path_effects=[withStroke(linewidth=5, foreground='w')])
+    ax.add_artist(circle)
+
+
+def text(x, y, text):
+    ax.text(x, y, text, backgroundcolor="white",
+            ha='center', va='top', weight='bold', color='orange')
+
+
+# Minor tick
+circle(0.50, -0.10)
+text(0.50, -0.32, "Label do tick menor")
+
+# Major tickMinor tick label
+circle(-0.03, 4.00)
+text(0.03, 3.80, "Tick maior")
+
+# Minor tick
+circle(0.00, 3.50)
+text(0.00, 3.30, "Tick menor")
+
+# Major tick label
+circle(-0.15, 3.00)
+text(-0.15, 2.80, "Label do Tick maior")
+
+# X Label
+circle(1.75, -0.30, radius=0.17)
+text(1.75, -0.50, "Label do eixo x")
+
+# Y Label
+circle(-0.3, 1.75, radius=0.17)
+text(-0.16, 1.57, "Label do eixo y")
+
+# Title
+circle(1.60, 4.13)
+text(1.60, 3.93, "Titulo")
+
+# Blue plot
+circle(1.75, 2.80)
+text(1.75, 2.60, "Linha\n(line plot)")
+
+# Red plot
+circle(1.20, 0.60)
+text(1.20, 0.40, "Linha\n(line plot)")
+
+# Scatter plot
+circle(3.20, 1.75)
+text(3.20, 1.55, "Marcadores\n(scatter plot)")
+
+# Grid
+circle(3.00, 3.00)
+text(3.00, 2.80, "Grid")
+
+# Legend
+circle(3.70, 3.80)
+text(3.70, 3.60, "Legenda")
+
+# Axes
+circle(0.5, 0.5)
+text(0.5, 0.3, "Axes")
+
+# Figure
+circle(-0.3, 0.65)
+text(-0.3, 0.45, "Figura")
+
+
+ax.annotate('Spines', xy=(4.0, 0.35), xytext=(3.3, 0.5),
+            weight='bold', color=color,
+            arrowprops=dict(arrowstyle='->',
+                            connectionstyle="arc3",
+                            color=color))
+
+ax.annotate('', xy=(3.15, 0.0), xytext=(3.45, 0.45),
+            weight='bold', color=color,
+            arrowprops=dict(arrowstyle='->',
+                            connectionstyle="arc3",
+                            color=color))
+
+
+plt.show()
 \end{figure}
 
 \begin{enumerate}
-    \item {\bf Figura}: Corresponde a figura como um todo. Isso inclui os eixos, objetos especiais como títulos, legendas, barras de cores,  e até mesmo subfiguras inseridas.
-    \item {\bf Eixos}: Um Eixo é um objeto anexado a uma Figura que contém uma região para plotagem de dados e geralmente inclui dois objetos (ou três no caso de 3D) que fornecem marcas e rótulos de marca para fornecer escalas para os dados nos Eixos. Cada Eixo também tem um título (definido por meio de \lstinline{set_title()}), um rótulo x (definido por meio de \lstinline{set_xlabel()}) e um rótulo y definido por \lstinline{set_ylabel()}).
-
-A classe Axes e suas funções de membro são o principal ponto de entrada para trabalhar com a interface OOP e têm a maioria dos métodos de plotagem definidos nelas (por exemplo, \lstinline{ax.plot()}, mostrado acima, usa o método plot)
+    \item {\bf Figura}: É o elemento {\tt figure} que controla a figura como um todo. O Este controla todos os demais elementos, como os Axes, Eixos e outros elementos chamados coletivamente de ``Artists''. O tutorial do matplotlib descreve este elemento  como sendo a tela (em branco) de uma pintura .
+    \item {\bf Axes}: O Axes corresponde a região da imagem com os dados preenchidos (a pintura). Cada figura pode conter diversos Axes. Cada Axes pode conter dois Eixos ou Axis (ou 3 axis, no caso de um gráfico em 3 dimensões), que é o elemento que determina os limites dos dados do gráfico. O elemento axes representam um plot individual na figura.
+    \item {\bf Eixos e seus Labels:} Os Axis determinam os limites dos gráficos, os ticks (major and minor) e os tickslabels dos eixos. Não confunda axes com axis. O elemento axis se refere aos eixos x e y (e z, se for um gráfico em 3D) do plot.
+    \item {\bf Artists mais comuns:} m Artist é basicamente tudo que você vê em um gráfico (inclusive os Axis, Axes e Figure). Então os objetos de texto, linhas, coleções, etc, são todos da classe {\tt Artist}, e quando a figura é renderizada, todos os artistas são desenhados na {\tt figure}. Alguns dos objetos mais comuns são {\tt plot} que desenha uma linha correspondente ao gráfico, o {\tt scatter} que desenha pontos, {\tt title} que coloca título no gráfico, {\tt grid} que desenha uma grade no gráfico. 
 \end{enumerate}
 
 
@@ -919,7 +1059,7 @@ print(words[0:20])
 
 Uma vez criada a lista de palavras, podemos utiliza-la para obter dados estatísticos sobre as palavras como no exemplo abaixo.
 
-\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Estatísticas das }, label={lst:isprime}]
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Estatísticas das palavras da Lingua Portuguesa}, label={lst:est-palavras}]
 import string
 import numpy as np
 import matplotlib.pyplot as plt
@@ -1038,6 +1178,10 @@ A saída deve ser análoga a Fig. \ref{fig:letras}.
     \item Um número $T$ é chamado triangular quando existe um inteiro $N$ tal que
     \[ T = 1+2+ \cdots+ N.\]
     Por exemplo, $3(=1+2)$, $6(=1+2+3)$, $10(=1+2+3+4)$ são números triangulares. Construa uma função que calcula o $n$-ésimo número triangular.
+    \item Construa gráficos das funções abaixo em uma única figura
+    \[(a) f(x)=x^4 e^{-x},\,\,\, (b) 2x^2e^{-x} \sin(x^2)\]
+Sua figura deve ter legenda, título, nomes nos eixos e um grid.
+
     \item  Quando escrevemos um número $n$ na base decimal estamos implicitamente dizendo:
 \[ n = d_N 10^N + d_{N-1} 10^{N-1} + \cdots + d_2 10^2 + d_1 10^1 + d_0 10^0 \]
 onde $N+1$ é o número de dígitos de $n$ e $d_k = 0,\cdots,9$, $k=0,\cdots,N$ são os dígitos desse número ($d_N \neq 0)$. Da mesma forma $n$ pode ser escrito na base binária, onde os digitos dão $b_j = 0,1 $ fazendo
@@ -1049,7 +1193,7 @@ resultado que obtemos reconhecendo a série geométrica finita na expressão aci
     \begin{enumerate}
         \item Escreva um programa para simular o problema descrito. O programa deve ser capaz de determinar aos final do processo: quais armários estão abertos, quais estão fechados e o número total de armários abertos.
         \item Como disse na introdução este é um problema de matemática. A resolução esperada do {\it Problema dos Armários} não envolve computação, mas sim a compreensão de propriedades de divisores de números inteiros. Vamos tentar entender essa propriedade usando um programa de computador: Construa um programa que analisa os 10 mil primeiros números inteiros e separa em uma lista aqueles que tem um número ímpar de divisores. Verifique que todos estes números são quadrados perfeitos. Suponha que esta é uma propriedade geral, como ela pode ser usada para responder o {\it Problema dos Armários}.
-        \item {\bf (Opcional)} Demonstre matemáticamente a propriedade conjecturada no item anterior, i.e.  ``Um núemero inteiro positivo é um quadrado perfeito se e somente se ele possui um número ímpar de divisores''.
+        \item {\bf (Opcional)} Demonstre matematicamente a propriedade conjecturada no item anterior, i.e.  ``Um número inteiro positivo é um quadrado perfeito se e somente se ele possui um número ímpar de divisores''.
     \end{enumerate}
 \end{enumerate}
 

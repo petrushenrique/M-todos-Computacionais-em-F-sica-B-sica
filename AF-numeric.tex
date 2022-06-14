@@ -1,5 +1,159 @@
 \chapter{Elementos de Cálculo Numérico}
+
+Neste apêndice discutimos alguns elementos de Cálculo Numérico que são empregados ao longo do texto. O material discutido aqui é largamente baseado nas referências \cite{garcia2000numerical, ayars2013computational, gezerlis2020numerical}. A importância de se obter resultados numéricos em Física é clara e não deve ser subestimada. Mas cabem algumas palavras de alerta. Em primeiro lugar, deve-se enfatizar que um ``cálculo numérico'' não é equivalente a um ``cálculo com uso de computador''. É claro que atualmente geralmente empregamos computadores para automatizar nossas abordagens numéricas para encontrar a solução de um problema. Isso é claro se deve a alta capacidade do computador para executar tarefas repetitivas simples. 
+
+
 \section{Soluções Numéricas}
+
+Nessa seção discutiremos o problema de se encontrar uma solução aproximadas para equações do tipo
+\[f(x) = 0 \]
+onde $f$ é uma função dada e $x_0$ é uma saída dessa função. Como um exemplo inicial, vamos considerar o problema de encontrar as raízes da equação:
+\[ \cos x = x. \]
+Vamos dar inicialmente um método simples para obter essa solução> Plotar o gráfico dessas funções, localizar visualmente o ponto onde os dois gráficos se interceptam e reduzir o range do plot em torno desse ponto afim de se obter uma solução aproximada. Note que a solução da equação acima só pode ocorrer para $x\geqslant 0$, e como para $x\geqslant 0$ temos  $0 \leqslant \cos x \leqslant 1$, a solução precisa ocorrer para $0 \leqslant x \leqslant 1$. Temos com isso um range inicial.
+
+\begin{minipage}{0.45\linewidth}
+\begin{lstlisting}[language = Python]
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.arange(0,1,0.01)
+cx = np.cos(x)
+
+plt.plot(x,cx)
+plt.plot(x,x)
+plt.title('Range de 0 a 1')
+plt.grid()
+\end{lstlisting}
+\end{minipage}
+\hspace{0.05 \linewidth}
+\begin{minipage}{0.45\linewidth}
+\includegraphics[scale=0.4]{Images/range1.png}
+\end{minipage}
+
+Note que a solução (ponto onde os gráficos se interceptam) enta entre $x=0.725$ e $x=0.75$. Vamos ajustar o passo em de nosso array $x$ (que atualmente é 0.1 e portanto da mesma ordem do intervalo que procuramos uma raiz)  e refazer o plot. 
+
+\begin{minipage}{0.45\linewidth}
+\begin{lstlisting}[language = Python]
+x = np.arange(.725,.75,0.0001)
+cx = np.cos(x)
+
+plt.plot(x,cx)
+plt.plot(x,x)
+plt.title('Range de .725 a .75')
+plt.minorticks_on()
+plt.grid(which='both')
+\end{lstlisting}
+\begin{lstlisting}[language = Python]
+x = np.arange(.7385,
+    .7395,0.00001)
+cx = np.cos(x)
+
+plt.plot(x,cx)
+plt.plot(x,x)
+plt.title('Range de .7385 
+    a .7395')
+plt.minorticks_on()
+plt.grid(which='both')
+\end{lstlisting}
+\end{minipage}
+\hspace{0.05 \linewidth}
+\begin{minipage}{0.45\linewidth}
+\includegraphics[scale=0.4]{Images/range2.png}
+\includegraphics[scale=0.4]{Images/range3.png}
+\end{minipage}
+De onde temos uma aproximação para a raiz como entre $.73905$ e $.7391$. Uma solução mais precisa é$x=0.73908513321516064166$.
+
+Você pode pensar que um método gráfico como o mostrado acima não é um método
+dos mais preciso para encontrar soluções numéricas. Mas esse método é simples e útil, além disso educativo manter o manter o método gráfico em mente para entender como outros métodos numéricos realmente funcionam. Uma das desvantagens do método gráfico é a automatização do processo. É necessária a intervenção humana para ler, interpretar o gráfico e se obter as aproximações.
+
+Um outro fator a ter em mente é que todos os métodos lhe darão uma resposta aproximadamente correta em todos, exceto talvez em alguns casos especiais. O nível de aproximação depende de quanto tempo de processamento você está disposto a dedicar ao problema. Você como usuário deve o quão boa deve ser sua aproximação.
+
+As subseções seguintes discutem alguns destes métodos e estão incluídas aqui com objetivos pedagógicos. Vale lembrar que  encontrar raízes é um problema bastante comum, e portanto é natural que nao Python já existam algumas boas bibliotecas para cuidar disso para você. Uma dessas bibliotecas é o {\tt  scipy.optimize},
+um subconjunto da biblioteca {\tt scipy}. O Scipy inclui implementações
+ções do método de bissecção {\tt bisect()}, método de Newton {\tt newton()}, além de diversas outras.
+
+\subsection{Método da Bisecção}
+
+O método da bissecção é  baseado no Teorema do Valor Intermediário\footnote{Não confunda com o teorema do valor médio.} \cite{lima2004curso}. Este teorema estabelece que se $f : [a, b] \to \mathbb{R}$ é uma função contínua e $\min(f(a), f(b)) \leqslant y_0 \leqslant \max(f(a),f(b))$ então existe $x_0 \in (a,b)$ tal que $f(x_0)=y_0$. 
+
+\begin{figure}[!h]
+\begin{minipage}{0.45\linewidth}
+Com este teorema em mente considere o problema de encontrar uma raiz 
+\[f(x) = 0,\,\,\, x \in [a,b].\]
+Suponha que $r \in (a,b)$ seja uma raiz. Então para $x_1<r$ e $x_2>r$ suficientemente próximos então $f(x_1)f(x_2)<0$, i.e. a função $f$ precisa trocar de sinal ao passar pela raiz (veja a Fig. \ref{fig:intermediario}).
+\end{minipage}
+\hspace{0.05\linewidth}
+\begin{minipage}{0.45\linewidth}
+\centering
+\input{Images/intermediario.tex}
+\caption{Teorema do Valor intermediário e o cálculo de raizes} \label{fig:intermediario}
+\end{minipage}
+\end{figure}
+
+para usar o método de bissecção para encontrar uma raiz, comece com um palpite para um valor maior que o da raiz e um valor maior que o da raiz. Eles não precisam ser palpites exatos, ou mesmo particularmente bons palpites, mas eles têm que estar em ambos os lados da raiz. Nós vamos chamar o palpite à esquerda da raiz de $x_1$ e o palpite à direita da raiz $x_2$, ou seja a raiz deve estar no intervalo $(x_1, x_2)$. Em seguida, calculamos o ponto médio deste intervalor $m = \frac{x_2 - x_1}{2}$. Compare os sinais de $f(m)$ e $f(x_1)$: se os sinais forem diferentes, então a raiz deve estar entre $x_1$ e $m$, então fazemos $x_2 = m$. Se os sinais forem os mesmos, então o raiz deve estar entre $m$ e $x_2$, então fazemos $x_1 = m$. Agora temos dois novos palpites $x_1$ e $x_2$ tais que raiz ainda está entre os dois, mas eles estão a metade da distância! Podemos repetir esse processo até que a distância entre $x_1$ e $x_2$ seja menor que a precisão desejada para o cálculo da raiz. O código abaixo implementa este método.
+
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Método da Bisecção para cálculo de raizes}, label={lst:bisection}]
+def root_bissection (f, x1, x2, tolerance=10e-6):
+    dx = np.abs(x2-x1)/2
+    while dx > tolerance:
+        m = (x2+x1)/2 
+        if f(x1)*f(m) < 0:
+            x2 = m
+        else:
+            x1 = m
+        dx = np.abs(x2-x1)/2
+    return (x2+x1)/2
+\end{lstlisting}
+
+Podemos agora usar a função acima para calcular uma raiz de
+\[e^x \ln x - x^2 = 0 \]
+Veja que fazendo $f(x) = e^x \ln x - x^2$, temos $f(1)=e-1 > 0$ enquanto $f(2)= e^2 \ln 2 - 4<0$, de forma que temos uma raiz no intervalo $(1,2)$. Vamos procurar uma raiz com uma precisão maior que $10^{-7}$. O código abaixo retornará o valor $1.6946001052856445$
+\begin{lstlisting}
+def f(x):
+    return np.exp(x)*np.log(x)-x**2
+    
+root_bissection(f, 1, 2)
+\end{lstlisting}
+
+\subsection{Método de Newton-Raphson}
+    
+Vamos admitir que a função $f$ que estamos interessados seja contínua e tenha uma derivada contínua em torno da da raiz $r$. O método de Newton-Raphson requer que se conheça tanto a função quanto a derivada da mesma. A idéia básica esta ilustrada na Fig. \ref{fig:Newton_method}
+
+\begin{figure}
+\centering
+\input{Images/newton-method}
+\caption{Método de Newton para encontrar uma raiz. Com uma estimativa inicial $x_1$, o
+valor da função de sua inclinação em $x_1$, o método nos fornece a próxima aproximação
+$x_2$. O valor da função e a inclinação em $x_2$ leva para a aproximação $x_3$, e assim sucessivamente até que se atinja a tolerância desejada} \label{fig:Newton_method}
+\end{figure}
+Conforme a Fig. \ref{fig:Newton_method}, se temos uma aproximação $x_n$ a aproximação seguinte, $x_{n+1}$, será dada pela intersecção da reta tangente a função $f$ em $x_n$ e o eixo $x$, ou seja satisfaz
+\[f'(x_n)x_{n+1}+(f(x_n)-f'(x_n)x_n) = 0 \]
+e portanto
+\[x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}.\]
+Vale notar que $r$ é um ponto fixo desta sequência, i.e. 
+\[ r = r - \frac{f(r)}{f'(r)}.\]
+Note também que 
+\[\left| x_{n+1} - x_n \right| = \left|\frac{f(x_n)}{f'(x_n)}\right| \]
+e portanto a medida que $f(x_n)$ se aproxima de 0 as aproximações ficarão cada vez mais próximas. É claro que há uma dificuldade quando a raiz $r$ não for simples, pois neste caso $f'(r)=0$. 
+
+\begin{lstlisting}[language=Python, frame=lines,basicstyle=\footnotesize, caption={Método da Newton-Raphson para cálculo de raizes}, label={lst:met-newton}]
+def root_newton (f,df, x1, tolerance=10e-6):
+    x = x1
+    dx = 2*tolerance 
+    while dx > tolerance:
+        xa = x
+        x += -f(x)/df(x)
+        dx = np.abs(x-xa)
+    return x 
+\end{lstlisting}
+
+Em geral o método de Newton é muito mais rápido que o método da bissecção. No entanto, como vimos ele possui vários problemas. O palpite inicial deve ser próximo da solução real, e em torno das raiz não deve haver nenhum pronto crítico (onde $f'(x)=0$). É claro que o método de Newton não funciona bem perto de descontinuidades em $f$. Além disso uma desvantagem obvia é que este método requer conhecimento de $f'(x)$. Se você não sabe, ou não pode obter,
+uma função que descreve a derivada, então o método de Newton não é uma opção.
+
+\subsection{Método da Secante}
+
+O método da secante é uma variação do método de Newton que não requer o conhecimento explicito do valor da derivada da função. A ideia é iniciar com dois palpites próximos $x_1$ e $x_2$ e utiliza-los para aproximar 
+
 \section{Diferenciação Numérica}
 
 Vamos discutir nessa seção estratégias numéricas para aproximação de derivadas de funções reais. Nosso objetivo é calcular aproximadamente a derivada de uma função a partir de um conjunto de pontos discretos $\{(x_i,y_i)\}_{i=0}^n$. Começamos discutindo as chamadas aproximações por diferenças finitas e, então, as aproximações de derivadas via ajuste ou interpolação. 
@@ -16,7 +170,7 @@ A existência da derivada de $f$ em $x_0$ garante que as duas aproximações ten
 Vamos observar essa propriedade com a função cosseno em $\frac{\pi}{4}$ usando os valores
 $\delta = 0.1, 10^{-2}, 10^{-3}, 10^{-4}$. 
 
-\begin{lstlisting}
+\begin{lstlisting}[language = Python]
 import numpy as np
 
 def forward_dif(func, x, h):
@@ -181,7 +335,7 @@ x(0) & = & 0
 É fácil ver que a solução deste problema é dada por $x(t) = \sin t$. Nesse exemplo vemos como a ordem de escolha do valor de $t$ para o update da posição $x$ é relevante. Note que temos duas formas:
 \[ x(t+dt) \approx x(t) = dt*\cos t,\,\, \textrm{e} \,\,\,x(t+dt) \approx x(t) = dt*\cos (t+dt)\]
 
-Na primeira utilizamos o valor anterior de $t$ para o cálculo da derivada e enquanto no segundo caso utilizamos o valor $t+dt$ para o cálculo da derivada.
+Na primeira utilizamos o valor anterior de $t$ para o cálculo da derivada e enquanto no segundo caso utilizamos o valor $t+dt$ para o cálculo da derivada. A saída deve ser como a mostrada na \ref{fig:euler2}.
 
 
 \begin{lstlisting}[language = Python]
@@ -206,19 +360,20 @@ for i in range(passos-1):
     x_list[i+1] = x_list[i]+np.cos(t_list[i])*dt
     x_list1[i+1] = x_list1[i]+np.cos(t_list[i+1])*dt
 
-plt.scatter(t_list, x_list, label='Metodo de Euler update c\ t anterior', 
-    marker='+', s=1)
-plt.scatter(t_list, x_list1, label='Metodo de Euler update c\ t atual',
-    marker='o', s=1)
+plt.scatter(t_list, x_list, 
+    label='Metodo de Euler update c\ t anterior', marker='+', s=1)
+plt.scatter(t_list, x_list1,
+    label='Metodo de Euler update c\ t atual', marker='o', s=1)
 plt.plot(t_list, np.sin(t_list), label='Solucao Analitica',
     color='red', linewidth=0.5)
 plt.legend()
 plt.show()
-print('Tamanho do passo=', dt, 'Erro Maximo (t anterior)=', np.abs((x_list-np.sin(t_list))).max(),
-     'Erro Maximo (t atual)=', np.abs((x_list1-np.sin(t_list))).max())
+print('Tamanho do passo=', dt, 'Erro Maximo (t anterior)=',
+    np.abs((x_list-np.sin(t_list))).max(),Erro Maximo (t atual)=',
+    np.abs((x_list1-np.sin(t_list))).max())
 \end{lstlisting}
 
-A saída deve ser como a mostrada na 
+
 
 \begin{figure}
     \centering
